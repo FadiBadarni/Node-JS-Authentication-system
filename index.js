@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const session = require("express-session");
 require("dotenv").config();
 const encoder = bodyParser.urlencoded();
 
@@ -19,6 +20,15 @@ const connection = mysql.createPool({
   password: DB_PASSWORD,
   database: DB_DATABASE,
 });
+
+app.set("view engine", "ejs");
+app.use(
+  session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 connection.getConnection((err, connection) => {
   if (err) throw err;
@@ -56,8 +66,10 @@ app.post("/register", encoder, async (req, res) => {
 
 //User Log In Post Request
 app.post("/login", encoder, (req, res) => {
-  const user = req.body.username;
+  var user = req.body.username;
   const password = req.body.password;
+  req.session.username = req.body.username;
+
   connection.getConnection(async (err, connection) => {
     if (err) throw err;
     const sqlSearch = "Select * from accounts.users where username = ?";
@@ -79,10 +91,8 @@ app.post("/login", encoder, (req, res) => {
               expiresIn: "1m", // expires in 365 days
             }
           );
-          console.log(token);
-          document.querySelector(".test").innerHTML = user;
-          //   res.send(`${user} is logged in!`);
-          res.redirect("/home");
+
+          res.redirect("/test");
         } else {
           console.log("---------> Password Incorrect");
           res.redirect("/login");
@@ -99,10 +109,14 @@ app.get("/home", function (req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 app.get("/login", function (req, res) {
-  res.sendFile(__dirname + "/Views/Pages/login.html");
+  res.sendFile(__dirname + "/views/Pages/login.html");
 });
 app.get("/register", function (req, res) {
-  res.sendFile(__dirname + "/Views/Pages/register.html");
+  res.sendFile(__dirname + "/views/Pages/register.html");
+});
+
+app.get("/test", async (req, res, next) => {
+  res.render("index", { username: req.session.username });
 });
 
 app.listen(3000);
