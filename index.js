@@ -22,6 +22,8 @@ const connection = mysql.createPool({
 });
 
 app.set("view engine", "ejs");
+app.use("/StyleSheets", express.static(__dirname + "/StyleSheets"));
+
 app.use(
   session({
     secret: "secret-key",
@@ -38,14 +40,14 @@ connection.getConnection((err, connection) => {
 //User Creation Post Request
 app.post("/register", encoder, async (req, res) => {
   var user = req.body.username;
-  console.log(user);
+  var email = req.body.email;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   connection.getConnection(async (err, connection) => {
     if (err) throw err;
     const sqlSearch = "SELECT * FROM accounts.users WHERE username = ?";
     const search_query = mysql.format(sqlSearch, [user]);
-    const sqlInsert = "INSERT INTO accounts.users VALUES (0,?,?)";
-    const insert_query = mysql.format(sqlInsert, [user, hashedPassword]);
+    const sqlInsert = "INSERT INTO accounts.users VALUES (0,?,?,?)";
+    const insert_query = mysql.format(sqlInsert, [user, hashedPassword, email]);
     await connection.query(search_query, async (err, result) => {
       if (err) throw err;
       if (result.length != 0) {
@@ -84,13 +86,14 @@ app.post("/login", encoder, (req, res) => {
         const hashedPassword = result[0].password;
         if (await bcrypt.compare(password, hashedPassword)) {
           console.log("---------> Login Successful");
-          var token = jwt.sign(
-            { user: user },
-            process.env.ACCESS_TOKEN_SECRET,
-            {
-              expiresIn: "1m", // expires in 365 days
-            }
-          );
+
+          // var token = jwt.sign(
+          //   { user: user },
+          //   process.env.ACCESS_TOKEN_SECRET,
+          //   {
+          //     expiresIn: "1m",
+          //   }
+          // );
 
           res.redirect("/test");
         } else {
@@ -118,5 +121,4 @@ app.get("/register", function (req, res) {
 app.get("/test", async (req, res, next) => {
   res.render("index", { username: req.session.username });
 });
-
 app.listen(3000);

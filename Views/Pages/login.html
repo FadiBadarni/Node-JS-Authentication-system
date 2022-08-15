@@ -5,25 +5,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="../../StyleSheets/CSS/login.css">
     <title>Document</title>
 </head>
 
 <body>
-    <section class="box">
-        <div class="design">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="form">
-            <h2>Login</h2>
+    <section>
+        <div class="login-form">
             <form action="" method="POST">
-                <input type="text" name="username" class="input-field" placeholder="username" />
-                <input type="password" name="password" class="input-field" placeholder="password" />
-                <input type="submit" class="btn" value="Login" />
+                <h2>Log In</h2>
+                <input type="text" name="username" class="input-field" placeholder="User Name" />
+                <input type="password" name="password" class="input-field" placeholder="Password" />
+                <button type="submit" class="login-btn" value="Login"><strong>Log In</strong></button>
             </form>
+            <div class="btn-group">
+
+                <a href="register"><button class="register-btn" value="Register"><strong>Register</strong></button></a>
+            </div>
         </div>
     </section>
 </body>

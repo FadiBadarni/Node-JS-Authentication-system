@@ -5,24 +5,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Page</title>
+    <link rel="stylesheet" href="../../StyleSheets/CSS/register.css">
+    <title>Document</title>
 </head>
 
 <body>
-    <section class="box">
-        <div class="design">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="form">
-            <h2>Register</h2>
+    <section>
+        <div class="register-form">
             <form action="" method="POST">
-                <input type="text" name="username" class="input-field" placeholder="username" />
-                <input type="password" name="password" class="input-field" placeholder="password" />
-                <input type="submit" class="btn" value="Register" />
+                <h2>Register</h2>
+                <input type="text" name="username" class="input-field" placeholder="User Name" required />
+                <input type="password" name="password" class="input-field" placeholder="Password" required />
+                <input type="email" name="email" class="input-field" placeholder="E-mail" required />
+                <button type="submit" class="register-btn" value="Register"><strong>Register</strong></button>
             </form>
+            <div class="btn-group">
+                <a href="login"><button class="register-btn" value="Register"><strong>LogIn</strong></button>
+                </a>
+            </div>
         </div>
     </section>
 </body>
