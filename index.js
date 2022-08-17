@@ -1,3 +1,4 @@
+const path = require("path");
 const mysql = require("mysql");
 const express = require("express");
 const app = express();
@@ -6,7 +7,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 require("dotenv").config();
+
 const encoder = bodyParser.urlencoded();
+const webRoutes = require("./routes/web");
+const errorController = require("./app/controllers/ErrorController");
 
 const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
@@ -22,7 +26,12 @@ const connection = mysql.createPool({
 });
 
 app.set("view engine", "ejs");
-app.use("/StyleSheets", express.static(__dirname + "/StyleSheets"));
+app.set("views", "views");
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use(webRoutes);
+app.use(errorController.pageNotFound);
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
   session({
@@ -37,88 +46,4 @@ connection.getConnection((err, connection) => {
   console.log("Data Base connected successfully: " + connection.threadId);
 });
 
-//User Creation Post Request
-app.post("/register", encoder, async (req, res) => {
-  var user = req.body.username;
-  var email = req.body.email;
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  connection.getConnection(async (err, connection) => {
-    if (err) throw err;
-    const sqlSearch = "SELECT * FROM accounts.users WHERE username = ?";
-    const search_query = mysql.format(sqlSearch, [user]);
-    const sqlInsert = "INSERT INTO accounts.users VALUES (0,?,?,?)";
-    const insert_query = mysql.format(sqlInsert, [user, hashedPassword, email]);
-    await connection.query(search_query, async (err, result) => {
-      if (err) throw err;
-      if (result.length != 0) {
-        connection.release();
-        //console.log("------> User already exists");
-        res.redirect("/register");
-      } else {
-        await connection.query(insert_query, (err, result) => {
-          connection.release();
-          if (err) throw err;
-          //console.log("--------> Created new User");
-          res.redirect("/home");
-        });
-      }
-    });
-  });
-});
-
-//User Log In Post Request
-app.post("/login", encoder, (req, res) => {
-  var user = req.body.username;
-  const password = req.body.password;
-  req.session.username = req.body.username;
-
-  connection.getConnection(async (err, connection) => {
-    if (err) throw err;
-    const sqlSearch = "Select * from accounts.users where username = ?";
-    const search_query = mysql.format(sqlSearch, [user]);
-    await connection.query(search_query, async (err, result) => {
-      connection.release();
-      if (err) throw err;
-      if (result.length == 0) {
-        console.log("--------> User does not exist");
-        res.redirect("/login");
-      } else {
-        const hashedPassword = result[0].password;
-        if (await bcrypt.compare(password, hashedPassword)) {
-          console.log("---------> Login Successful");
-
-          // var token = jwt.sign(
-          //   { user: user },
-          //   process.env.ACCESS_TOKEN_SECRET,
-          //   {
-          //     expiresIn: "1m",
-          //   }
-          // );
-
-          res.redirect("/test");
-        } else {
-          console.log("---------> Password Incorrect");
-          res.redirect("/login");
-        }
-      }
-    });
-  });
-});
-
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/index.html");
-});
-app.get("/home", function (req, res) {
-  res.sendFile(__dirname + "/index.html");
-});
-app.get("/login", function (req, res) {
-  res.sendFile(__dirname + "/views/Pages/login.html");
-});
-app.get("/register", function (req, res) {
-  res.sendFile(__dirname + "/views/Pages/register.html");
-});
-
-app.get("/test", async (req, res, next) => {
-  res.render("index", { username: req.session.username });
-});
 app.listen(3000);
