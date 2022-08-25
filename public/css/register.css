@@ -1,55 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
 
 :root {
-    font-family: 'PT Serif', serif;
-    font-size: 1.2rem;
     background-color: hsl(0, 0%, 49%);
 }
 
-.register-form {
-    border: 1px solid black;
-    display: inline-block;
-    align-items: center;
-    justify-content: space-between;
-    width: 30rem;
-    padding: 0.3rem;
-    text-align: center;
-}
-
-.register-form input {
-    width: 10rem;
-    height: 1.3rem;
-    border: 15%;
-    box-shadow: 1px 2px 4px black;
-    text-align: center;
-}
-
-.register-form input[name="email"] {
-    margin-right: 10.5rem;
-    margin-top: 0.5rem;
-}
-
-.btn-group {
-    margin: 1rem auto;
-    text-align: center;
-}
-
-.login-btn,
-.register-btn {
+.form-div {
+    border: 3px solid #000000;
+    max-width: 50rem;
+    max-height: 100vh;
+    margin: 0 auto;
     position: relative;
-    width: 5rem;
-    height: 1.4rem;
-    background-color: rgb(156, 136, 173);
-    border-radius: 15%;
-    cursor: pointer;
+
+
 }
 
-.btn-group a {
-    text-decoration: none;
-    color: inherit;
+.register-form {
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+    padding: 0rem 1rem;
+
+
 }
 
-.login-btn:hover,
-.register-btn:hover {
-    background-color: rgb(186, 162, 207);
+.register-form label.usernameLabel,
+.register-form label.passwordLabel,
+.register-form label.emailLabel,
+.register-form label.confirmPasswordLabel {
+    display: block;
+    width: 20%;
+    padding: 0.4rem;
+    border: 1px solid #000000;
+    margin-bottom: 1rem;
+    border-radius: 0.8rem;
+}
+
+.register-form label.gender {
+    border: 1px solid #000000;
+}
+
+.register-form input[name="gender"] {
+    border: 1px solid #000000;
+
+}
+
+.register-form input[name="username"],
+.register-form input[name="email"],
+.register-form input[name="password"],
+.register-form input[name="confirmPassword"] {
+    display: block;
+    width: 70%;
+    padding: 0.4rem;
+    border: 1px solid #000000;
+    margin-bottom: 1rem;
+    border-radius: 0.8rem;
+}
+
+.register-form .register-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-left: 3rem;
+}
+
+.register-form .login-btn {
+    margin-left: 3rem;
+    margin-top: 2rem;
+    padding: 0.5rem 1rem;
 }

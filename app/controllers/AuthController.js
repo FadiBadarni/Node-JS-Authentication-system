@@ -1,12 +1,20 @@
 const bcrypt = require("bcryptjs");
-
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.registerPage = (req, res, next) => {
-  res.render("register", {
-    layout: "register_layout",
-    pageTitle: "Register",
-  });
+  if (req.session.loggedin) {
+    res.render("index", {
+      isLoggedIn: req.session.loggedin,
+      username: req.session.name,
+    });
+  } else {
+    res.render("register", {
+      isLoggedIn: req.session.loggedin,
+      username: req.session.name,
+    });
+  }
 };
 
 exports.register = (req, res, next) => {
@@ -40,15 +48,14 @@ exports.register = (req, res, next) => {
 
 exports.loginPage = (req, res, next) => {
   res.render("login", {
-    layout: "login_layout",
-    pageTitle: "Login",
+    isLoggedIn: req.session.loggedin,
   });
 };
 
 exports.login = (req, res, next) => {
   User.findOne({
     where: {
-      email: req.body.inputEmail,
+      username: req.body.inputUsername,
     },
   })
     .then((user) => {
@@ -57,21 +64,30 @@ exports.login = (req, res, next) => {
           .compare(req.body.inputPassword, user.password)
           .then((doMatch) => {
             if (doMatch) {
+              req.session.loggedin = true;
+              req.session.name = req.body.inputUsername;
+              const username = req.session.name;
+              res.locals.user = user;
+              const token = jwt.sign(
+                {
+                  username: username,
+                },
+                process.env.ACCESS_TOKEN_SECRET,
+                {
+                  expiresIn: "1h",
+                }
+              );
+              console.log("from login token:", token);
+              res.cookie("token", token, { maxAge: 30 * 1000 });
               return res.redirect("/");
             }
-            // req.flash('error', 'Invalid email or password.');
-            // req.flash('oldInput',{email: req.body.inputEmail});
             return res.redirect("/login");
           })
           .catch((err) => {
             console.log(err);
-            // req.flash('error', 'Sorry! Somethig went wrong.');
-            // req.flash('oldInput',{email: req.body.inputEmail});
             return res.redirect("/login");
           });
       } else {
-        // req.flash('error', 'No user found with this email');
-        // req.flash('oldInput',{email: req.body.inputEmail});
         return res.redirect("/login");
       }
     })

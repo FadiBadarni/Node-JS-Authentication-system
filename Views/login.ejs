@@ -6,25 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" href="css/login.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Log In Page</title>
 </head>
 
 <body>
-    <section>
-        <div class="login-form">
-            <form action="" method="POST">
-                <h2 class="test">Log In</h2>
-                <input id="inputEmail" type="email" name="inputEmail" class="input-field" placeholder="Email" />
-                <input id="inputPassword" type="password" name="inputPassword" class="input-field"
-                    placeholder="Password" />
-                <button type="submit" class="login-btn" value="Login"><strong>Log In</strong></button>
-            </form>
-            <div class="btn-group">
+    <%- include('partials/header') %>
+        <section>
+            <div class="login-form">
+                <form action="" method="POST">
+                    <h2 class="test">Log In</h2>
+                    <input id="inputUsername" type="text" name="inputUsername" class="input-field"
+                        placeholder="Username" autocomplete="off" />
+                    <input id="inputPassword" type="password" name="inputPassword" class="input-field"
+                        placeholder="Password" autocomplete="off" />
+                    <button type="submit" class="login-btn" value="Login"><strong>Log In</strong></button>
+                </form>
+                <div class="btn-group">
 
-                <a href="register"><button class="register-btn" value="Register"><strong>Register</strong></button></a>
+                    <a href="register"><button class="register-btn"
+                            value="Register"><strong>Register</strong></button></a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
 
 

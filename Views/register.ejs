@@ -6,26 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" href="css/register.css" rel="stylesheet">
-    <title>Document</title>
+    <title>Registeration Page</title>
 </head>
 
 <body>
-    <section>
-        <div class="register-form">
-            <form action="/register" method="POST">
-                <h2>Register</h2>
-                <input id="username" type="text" name="username" class="input-field" placeholder="User Name" required />
-                <input id="password" type="password" name="password" class="input-field" placeholder="Password"
-                    required />
-                <input id="email" type="email" name="email" class="input-field" placeholder="E-mail" required />
-                <button type="submit" class="register-btn" value="Register"><strong>Register</strong></button>
-            </form>
-            <div class="btn-group">
-                <a href="login"><button class="register-btn" value="Register"><strong>LogIn</strong></button>
+    <%- include('partials/header') %>
+        <section>
+
+            <div class="form-div">
+                <form class="register-form" action="/register" method="POST">
+                    <h1>Registeration Form</h1>
+                    <label class="usernameLabel" for="username">Username<span aria-label="required"></span></label>
+                    <input id="username" type="text" name="username" autocomplete="off" required>
+                    <label class="emailLabel" for="email">Email <span aria-label="required"></span></label>
+                    <input id="email" type="email" name="email" autocomplete="off" required>
+                    <label class="passwordLabel" for="password">Password <span aria-label="required"></span></label>
+                    <input id="password" type="text" name="password" autocomplete="off" required>
+                    <label class="confirmPasswordLabel" for="confirmPassword">Confirm Password <span
+                            aria-label="required"></span></label>
+                    <input id="confirmPassword" type="text" name="confirmPassword" autocomplete="off" required>
+
+                    <button type="submit" class="register-btn">Register</button>
+                </form>
+                <a href="login"><button class="register-btn" value="Register"><strong>Log In</strong></button>
                 </a>
             </div>
-        </div>
-    </section>
+
+        </section>
+
+
 </body>
 
 </html>
